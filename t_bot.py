@@ -1,8 +1,11 @@
-# dependencies python-twitter google-api-python-client
+# dependencies python-twitter dropbox
 
 from __future__ import print_function
 
 import twitter
+import dropbox
+import random
+
 
 
 CONSUMER_KEY = ""
@@ -10,6 +13,7 @@ CONSUMER_SEC = ""
 ACCESS_TOK = ""
 ACCESS_SEC = ""
 login_info = None
+
 
 # get login info from file
 try:
@@ -22,15 +26,41 @@ CONSUMER_SEC = login_info.readline().rstrip("\r").rstrip("\n")
 ACCESS_TOK = login_info.readline().rstrip("\r").rstrip("\n")
 ACCESS_SEC = login_info.readline().rstrip("\r").rstrip("\n")
 
+DROPBOX_KEY = login_info.readline().rstrip("\r").rstrip("\n")
+DROPBOX_SEC = login_info.readline().rstrip("\r").rstrip("\n")
+DROPBOX_TOK = login_info.readline().rstrip("\r").rstrip("\n")
+
+login_info.close()
+
+# Get twitter connection
 api = twitter.Api(consumer_key=CONSUMER_KEY,
                   consumer_secret=CONSUMER_SEC,
                   access_token_key=ACCESS_TOK,
                   access_token_secret=ACCESS_SEC)
 
-# get file from drive
+# get file from dropbox
 
-message = "test"
+dbx = dropbox.Dropbox(DROPBOX_TOK)
 
-status = api.PostUpdate(message)
+def getImage():
+    files = dbx.files_list_folder("").entries
+    # grab a random file
+    choice = files[random.randint(0,len(files)-1)]
 
-print(status)
+    dbx.files_download_to_file("img.jpg", '/' + choice.name)
+
+
+
+
+
+
+def postMessage():
+    with open("img.jpg", "rb") as f:
+        message = "test"
+        status = api.PostUpdate(message, media=f)
+
+
+getImage()
+postMessage()
+
+

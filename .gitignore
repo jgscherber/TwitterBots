@@ -1,3 +1,7 @@
 
 #private info
 login_info.txt
+
+# un-needed
+Thumbs.db
+*.jpg
