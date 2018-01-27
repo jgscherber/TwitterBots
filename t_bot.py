@@ -21,14 +21,12 @@ try:
 except IOError:
     print("Could not open login information")
 
-CONSUMER_KEY = login_info.readline().rstrip("\r").rstrip("\n")
-CONSUMER_SEC = login_info.readline().rstrip("\r").rstrip("\n")
-ACCESS_TOK = login_info.readline().rstrip("\r").rstrip("\n")
-ACCESS_SEC = login_info.readline().rstrip("\r").rstrip("\n")
+login_str = login_info.read()
 
-DROPBOX_KEY = login_info.readline().rstrip("\r").rstrip("\n")
-DROPBOX_SEC = login_info.readline().rstrip("\r").rstrip("\n")
-DROPBOX_TOK = login_info.readline().rstrip("\r").rstrip("\n")
+for c in ['\n','\r',' ']:
+    login_str = login_str.replace(c, '')
+
+CONSUMER_KEY, CONSUMER_SEC, ACCESS_TOK, ACCESS_SEC, DROPBOX_KEY, DROPBOX_SEC, DROPBOX_TOK = login_str.split(',')
 
 login_info.close()
 
